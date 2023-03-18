@@ -1,0 +1,4 @@
+Hello Friends!
+This is a compiler construction lab.
+C programming is real fun.
+Have a nice day.
