@@ -1,31 +1,81 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-char* removeSpaces(char *);
+char *removeSpaces(char *);
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
+    
+    if (argc != 2){
+        perror("Invalid no of arguments\n");
+        exit(1);
+    }
 
-    char *str = (char *)malloc(200);
+    char *str = malloc(strlen(argv[1]) + 2);
+    strcpy(str, argv[1]); 
+    strcat(str, "\n");
 
-    printf("Please enter a string: ");
-    fgets(str, 200, stdin);
 
     printf("%s", removeSpaces(str));
 
+
+    free(str);
     return 0;
 }
 
-char* removeSpaces(char *str)
+char *removeSpaces(char *str)
 {
     int charFoundFlag = 0;
-    for (int i = 0; str[i] != '\0'; i++)
+    int spaceCounter = 0;
+    int newStrCounter = 1;
+    char *newStr = (char *)malloc(200);
+	newStr[0] = '"';
+    for (int i = 0; str[i] != '\n'; i++)
     {
 
         if (str[i] != ' ')
         {
-
+        	
+            newStr[newStrCounter] = str[i];
+            newStrCounter++;
             charFoundFlag = 1;
+            spaceCounter = 0;
+        }
+        //space found at starting
+        
+        else if (str[i] == ' ' && charFoundFlag == 0)
+        {
+            continue;
+        }
+        // space found after a nonspace
+        
+        else
+        {	
+            if (spaceCounter == 0)
+            {
+                newStr[newStrCounter] = str[i];
+                newStrCounter++;
+                spaceCounter++;
+            }
         }
     }
+    
+	newStr[newStrCounter] = '"';
+	char* finalStr = (char*)malloc(200);
+	finalStr[0] = '"';
+	for(int i = 1; newStr[i] != '"'; i++){
+		if(newStr[i] == ';'){
+			if(newStr[i-1] == ' '){
+				finalStr[i-1] = ';';
+			}
+            if(newStr[i+1] == ' '){
+                finalStr[i] = '"';
+                finalStr[i+1] = '\n';
+                break;
+            }
+		}
+        finalStr[i] = newStr[i];
+	}
+    return finalStr;
 }
