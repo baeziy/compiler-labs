@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 
     char *str = malloc(strlen(argv[1]) + 2);
     strcpy(str, argv[1]); 
-    strcat(str, "\n");
+    strcat(str, " \n");
 
 
     printf("%s", removeSpaces(str));
@@ -61,21 +61,34 @@ char *removeSpaces(char *str)
         }
     }
     
-	newStr[newStrCounter] = '"';
-	char* finalStr = (char*)malloc(200);
-	finalStr[0] = '"';
-	for(int i = 1; newStr[i] != '"'; i++){
-		if(newStr[i] == ';'){
-			if(newStr[i-1] == ' '){
-				finalStr[i-1] = ';';
-			}
+	 newStr[newStrCounter] = '"';
+    int semiColonCheck = 0;
+    char* finalStr = (char*)malloc(200);
+    finalStr[0] = '"';
+    int i = 1;
+    for(; newStr[i] != '"'; i++){
+        
+        if(newStr[i] == ';' && newStrCounter-2 == i){
+            semiColonCheck = 1;
+            if(newStr[i-1] == ' '){
+                finalStr[i-1] = ';';
+            }
             if(newStr[i+1] == ' '){
                 finalStr[i] = '"';
                 finalStr[i+1] = '\n';
                 break;
             }
-		}
+        }
         finalStr[i] = newStr[i];
-	}
+    }
+    if (!semiColonCheck){
+        finalStr[i-1] = '\"';
+        finalStr[i] = '\n'; 
+        // strcat(finalStr, "\"\n");
+    }
     return finalStr;
 }
+
+
+
+
